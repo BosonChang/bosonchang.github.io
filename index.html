@@ -1,20 +1,20 @@
+<!-- index.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <title>Your Personal Website</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome to Your Personal Website</h1>
-        <p>Explore the following sections:</p>
-        <a class="button" href="home.html">Home</a>
-        <a class="button" href="schedule.html">Schedule</a>
-        <a class="button" href="courses.html">Courses</a>
-        <a class="button" href="about.html">About Me</a>
-    </div>
-    <script src="script.js"></script>
+    <script>
+        // Load the navbar from navbar.html
+        fetch("navbar.html")
+            .then(response => response.text())
+            .then(data => {
+                document.querySelector("nav").outerHTML = data;
+            });
+    </script>
+
+    <!-- Your page-specific content goes here -->
+    <h1>Welcome to the Home Page</h1>
 </body>
 </html>
