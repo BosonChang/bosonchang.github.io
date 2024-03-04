@@ -9,7 +9,8 @@
 }
 
 html{
-	/* background: rgb(47, 54, 64); */
+	background: url(background.jpg);
+    background-size: cover;
 }
 
 body{
