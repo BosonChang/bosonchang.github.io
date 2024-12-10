@@ -1,0 +1,45 @@
+*{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-decoration: none;
+    color: black;
+}
+
+/* Style for the overall navigation bar */
+nav {
+    background-color: #333; /* Dark background for the navbar */
+    color: #f2f2f2; /* Light text color */
+    text-align: center; /* Center aligning the text */
+    padding: 14px 16px; /* Padding around the content */
+    font-family: Arial, sans-serif; /* Font style for the navbar */
+}
+
+/* Unordered list styling */
+nav ul {
+    list-style: none; /* Removes bullet points */
+    margin: 0;
+    padding: 0;
+    display: flex; /* Display list items in a row */
+    justify-content: center; /* Center items horizontally */
+}
+
+/* Each list item */
+nav li {
+    padding: 8px 12px; /* Spacing inside each list item */
+}
+
+/* Link styling */
+nav a {
+    color: #f2f2f2; /* Light color for text */
+    text-decoration: none; /* No underline */
+    font-size: 16px; /* Font size */
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out, font-size 0.3s ease-in-out; /* Smooth transition for multiple properties */
+}
+
+/* Hover effect for links */
+nav a:hover {
+    color: #fff; /* White color text on hover */
+    font-size: 18px; /* Larger font size on hover */
+    transform: scale(1.1); /* Slightly increase size */
+}
