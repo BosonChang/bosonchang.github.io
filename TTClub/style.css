@@ -1,3 +1,6 @@
 table{
     background-color: black;
 }
+td{
+    padding: 10px;
+}
