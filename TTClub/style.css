@@ -1,6 +1,10 @@
 table{
     background-color: black;
 }
+th{
+    padding: 10px;
+    font-size: large;
+}
 td{
     padding: 10px;
 }
