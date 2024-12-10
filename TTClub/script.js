@@ -35,40 +35,40 @@ function generateContent(players) {
     });
 }
 
-// function loadMatchesData() {
-//     fetch('matches.json')
-//         .then(response => response.json())
-//         .then(data => displayMatchData(data))
-//         .catch(error => console.error('Error loading match histories: ', error));
-// }
+function loadMatchesData() {
+    fetch('matches.json')
+        .then(response => response.json())
+        .then(data => displayMatchData(data))
+        .catch(error => console.error('Error loading match histories: ', error));
+}
 
-// function displayMatchData(matches) {
-//     var contentArea = document.getElementById('matchHistoryList');
-//     contentArea.innerHTML = ''; // Clear previous content
+function displayMatchData(matches) {
+    var contentArea = document.getElementById('matchHistoryList');
+    contentArea.innerHTML = ''; // Clear previous content
 
-//     matches.forEach((match, index) => {
-//         var tableRow = document.createElement('tr');
+    matches.forEach((match, index) => {
+        var tableRow = document.createElement('tr');
 
-//         // Set row colors: alternating between gray and dark gray
-//         tableRow.style.backgroundColor = index % 2 === 0 ? 'gray' : 'darkgray';
+        // Set row colors: alternating between gray and dark gray
+        tableRow.style.backgroundColor = index % 2 === 0 ? 'gray' : 'darkgray';
 
-//         var tableItem_Player1 = document.createElement('td');
-//         var tableItem_Player2 = document.createElement('td');
-//         var tableItem_Score = document.createElement('td');
-//         tableItem_Player1.textContent = match.player1;
-//         tableItem_Player2.textContent = match.player2;
-//         tableItem_Score.textContent = match.player1Score + ":" + match.player2Score;
+        var tableItem_Player1 = document.createElement('td');
+        var tableItem_Player2 = document.createElement('td');
+        var tableItem_Score = document.createElement('td');
+        tableItem_Player1.textContent = match.player1;
+        tableItem_Player2.textContent = match.player2;
+        tableItem_Score.textContent = match.player1Score + ":" + match.player2Score;
 
-//         tableRow.appendChild(tableItem_Player1);
-//         tableRow.appendChild(tableItem_Score);
-//         tableRow.appendChild(tableItem_Player2);
+        tableRow.appendChild(tableItem_Player1);
+        tableRow.appendChild(tableItem_Score);
+        tableRow.appendChild(tableItem_Player2);
 
-//         contentArea.appendChild(tableRow);
-//     });
-// }
+        contentArea.appendChild(tableRow);
+    });
+}
 
 // Initial display
 window.onload = function () {
     loadPlayersData();
-    //loadMatchesData();
+    loadMatchesData();
 };
