@@ -6,9 +6,17 @@
     color: black;
 }
 
+#bg{
+    width: 100%;
+    height: 100%;
+}
+
 /* Style for the overall navigation bar */
 nav {
-    background-color: #333; /* Dark background for the navbar */
+    position: fixed;
+    width: 100vw;
+    height: 60;
+    background-color: #151515; /* Dark background for the navbar */
     color: #f2f2f2; /* Light text color */
     text-align: center; /* Center aligning the text */
     padding: 14px 16px; /* Padding around the content */
@@ -31,15 +39,41 @@ nav li {
 
 /* Link styling */
 nav a {
-    color: #f2f2f2; /* Light color for text */
-    text-decoration: none; /* No underline */
-    font-size: 16px; /* Font size */
-    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out, font-size 0.3s ease-in-out; /* Smooth transition for multiple properties */
+    color: #f2f2f2;
+    text-decoration: none;
+    font-size: 16px;
+    display: inline-block; /* required for transform to work properly */
+    transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
-/* Hover effect for links */
 nav a:hover {
-    color: #fff; /* White color text on hover */
-    font-size: 18px; /* Larger font size on hover */
-    transform: scale(1.1); /* Slightly increase size */
+    color: #fff;
+    transform: scale(1.2); /* visually enlarges without affecting layout */
 }
+
+.card-title {
+    background-color: white;
+    margin: 1%;
+    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 👈 This adds the shadow */
+    border-radius: 100px; /* optional: softens the edges */
+}
+
+.content-container {
+    display: flex;
+    justify-content: center; /* or space-between / space-around */
+    flex-wrap: wrap; /* allows wrapping on small screens */
+    gap: 2rem; /* space between cards */
+    padding: 1rem;
+}
+
+.card {
+    background-color: white;
+    padding: 1rem;
+    margin: 0; /* gap handles spacing now */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    width: 30%; /* adjust based on how many you want in a row */
+    box-sizing: border-box;
+}
+
