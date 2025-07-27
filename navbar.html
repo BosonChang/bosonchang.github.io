@@ -22,34 +22,59 @@
 
     }
 
-    h1 {
-        color: white;
-        float: left;
-        font-size: 5vh;
 
-        line-height: 7vh;
-        margin-left: 3vw;
-        font-family: "Italianno", cursive;
-        font-weight: 400;
-        font-style: normal;
-    }
+h1 {
+    color: white;
+    font-size: 5vh;
+    font-family: "Italianno", cursive;
+    font-weight: 400;
+    font-style: normal;
+    /* Remove float and margin-left */
+}
 
+nav {
+    background-color: black;
+    width: 100vw;
+    height: 7vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 3vw;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+ul {
+    display: flex;
+    gap: 3vw;
+    list-style: none;
+    align-items: center;
+    flex-wrap: wrap; /* Allow wrapping */
+}
+
+li {
+    display: inline-block;
+    /* Remove margin-right */
+}
+
+@media (max-width: 300px) {
     nav {
-        background-color: black;
-        width: 100dvw;
-        height: 7vh;
+        flex-direction: column;
+        height: auto;
+        align-items: flex-start;
+        padding: 1vh 3vw;
     }
-
     ul {
-        float: right;
-        list-style: none;
-        line-height: 7vh;
+        flex-direction: column;
+        gap: 1vh;
+        width: 100%;
+        align-items: flex-end;
     }
-
-    li {
-        display: inline-block;
-        margin-right: 3vw;
+    h1 {
+        font-size: 4vh;
+        margin-bottom: 1vh;
     }
+}
 
     a {
         color: white;
