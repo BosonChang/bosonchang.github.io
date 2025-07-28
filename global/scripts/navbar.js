@@ -23,6 +23,7 @@ function dropDown() {
   }
 
 }
+window.dropDown = dropDown;
 window.addEventListener("resize", checkSize);
 function checkSize() {
   const navli = document.getElementById("navlist");
