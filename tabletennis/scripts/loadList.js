@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 postElement.innerHTML = `
                 <iframe src="https://www.youtube.com/embed/${post.contentID}" allowfullscreen></iframe>
           <div class="text-section">
-            <h2>${post.title}</h2>
+            <h2>${post.title} ${post.favorite ? '⭐' : ''} </h2>
             <h4>${post.date}</h4>
             <p>${post.notes}</p>
           </div>
