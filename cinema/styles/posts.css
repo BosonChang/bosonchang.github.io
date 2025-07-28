@@ -32,14 +32,14 @@
 }
 .post .logline{
     font-style: italic;
-    font-size: 2vh;
+    font-size: 2.3vh;
     margin-bottom: 1vh;
 }
 .post .description{
     word-wrap: break-word;
     hyphens: auto;
     -webkit-hyphens: auto;
-    font-size: 1.7vh;
+    font-size: 2vh;
 }
 .post .frame-container.left {
   float: left;

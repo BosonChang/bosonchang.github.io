@@ -1,0 +1,35 @@
+#content-area{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3vw;
+    margin: auto;
+    margin-top: 1%;
+    width: 93%;
+}
+
+.post{
+    box-shadow: 0px 0px 0px black;
+    border: 2px solid black;
+    border-radius: 1px;
+    aspect-ratio: 1/1;
+    transition-duration: 500ms;
+}
+.post:hover{
+    box-shadow: 0px 0px 10px black;
+    transition-duration: 700ms;
+}
+
+iframe{
+    /* width: 100%; */
+    aspect-ratio: 16/9;
+}
+
+.text-section{
+    margin-inline: 1vh;
+}
+
+@media (max-width:100vh){
+    #content-area{
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
