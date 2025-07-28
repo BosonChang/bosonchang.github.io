@@ -9,8 +9,8 @@
 
 .post{
     box-shadow: 0px 0px 0px black;
-    border: 2px solid black;
-    border-radius: 3px;
+    border: 1px solid black;
+    /* border-radius: 3px; */
     aspect-ratio: 1/1;
     transition-duration: 500ms;
 }
@@ -27,6 +27,22 @@ iframe{
 
 .text-section{
     margin-inline: 1vh;
+}
+
+h2{
+    font-family:monospace;
+    font-size: 3vh;
+}
+h4{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 500;
+    font-size: 1.7vh;
+}
+
+p{
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 400;
+    font-size: 2vh;
 }
 
 @media (max-width:100vh){
