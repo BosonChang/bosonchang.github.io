@@ -1,5 +1,16 @@
 #content-area{
-    background-image: url("/bc/imgs/white\ wall.jpg"), linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, 0.4));
+    background-image: url("/bc/imgs/white\ wall.jpg"), linear-gradient(rgba(0, 0, 0, .7), rgba(0, 0, 0, .7));
     background-blend-mode: darken;
-    background-size: cover;
+    background-size:cover;
+    background-attachment:fixed;
+    overflow: auto;
+}
+img{
+    scale: 1;
+    transition-duration: 100ms;
+}
+
+img:hover{
+    scale: 1.2;
+    transition-duration: 200ms;
 }
