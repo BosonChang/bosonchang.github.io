@@ -4,13 +4,12 @@
     gap: 3vw;
     margin: auto;
     margin-top: 1%;
-    width: 93vw;
+    width: 95vw;
 }
 
 .post{
     box-shadow: 0px 0px 0px black;
     border: 1px solid black;
-    /* border-radius: 3px; */
     aspect-ratio: 1/1;
     transition-duration: 500ms;
 }
