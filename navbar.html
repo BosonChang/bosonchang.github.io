@@ -2,11 +2,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Italianno&display=swap" rel="stylesheet">
+    <script src="global/scripts/dropDownMenu.js"></script>
 </head>
 
-<nav>
+<nav onclick="dropDown()">
     <h1>Boson Chang</h1>
-    <ul class="navlinks">
+    <ul id="navlist">
         <li><a href="index.html">BC</a></li>
         <li><a href="tabletennis.html">Table Tennis</a></li>
         <li><a href="cinema.html">Cinema</a></li>
@@ -29,7 +30,7 @@
         font-family: "Italianno", cursive;
         font-weight: 400;
         font-style: normal;
-        /* Remove float and margin-left */
+        user-select: none;
     }
 
     nav {
@@ -80,10 +81,6 @@
             font-size: 4vh;
             margin-bottom: 1vh;
         }
-
-        nav:hover ul.navlinks {
-            display: flex;
-        }
     }
 
     a {
@@ -93,5 +90,6 @@
         font-family: "Italianno", cursive;
         font-weight: 400;
         font-style: normal;
+        user-select: none;
     }
 </style>

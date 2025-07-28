@@ -38,6 +38,7 @@
 .post .description{
     word-wrap: break-word;
     hyphens: auto;
+    -webkit-hyphens: auto;
     font-size: 1.7vh;
 }
 .post .frame-container.left {
