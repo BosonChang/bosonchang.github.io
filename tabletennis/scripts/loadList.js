@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    fetch('tabletennis/data/videos.json')
+    fetch('data/videos.json')
         .then(response => response.json())
         .then(posts => {
             const container = document.getElementById('content-area');

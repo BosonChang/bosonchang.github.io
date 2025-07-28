@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    fetch('cinema/data/films.json')
+    fetch('data/films.json')
         .then(response => response.json())
         .then(posts => {
             const container = document.getElementById('content-area');
