@@ -1,0 +1,5 @@
+#content-area{
+    background-image: url("/bc/imgs/white\ wall.jpg"), linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, 0.4));
+    background-blend-mode: darken;
+    background-size: cover;
+}
