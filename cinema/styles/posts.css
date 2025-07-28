@@ -9,7 +9,7 @@
     float: left;
     margin-inline: 2vw;
     width: 40vw;
-    height: 22.5vw;
+    aspect-ratio: 2/1;
 }
 .post iframe{
     width: 100%;
