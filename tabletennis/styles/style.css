@@ -11,12 +11,12 @@
     box-shadow: 0px 0px 0px black;
     border: 1px solid black;
     aspect-ratio: 1/1;
-    transition-duration: 500ms;
+    transition-duration: 50ms;
 }
 .post:hover{
     box-shadow: 0px 0px 5px black;
     scale: 1.05;
-    transition-duration: 700ms;
+    transition-duration: 100ms;
 }
 
 iframe{
