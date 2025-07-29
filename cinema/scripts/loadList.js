@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(posts => {
             const container = document.getElementById('content-area');
             posts.reverse().forEach((post, index) => {
-                const floatDirection = index % 2 === 0 ? 'right' : 'left';
+                const floatDirection = index % 2 === 0 ? 'left' : 'right';
 
                 const postElement = document.createElement('div');
                 postElement.className = 'post';

@@ -8,7 +8,7 @@ body{
     grid-template-columns: repeat(3, 1fr);
     gap: 3vw;
     margin: auto;
-    margin-top: 1%;
+    margin-top: 2vh;
     width: 95vw;
 }
 
@@ -30,24 +30,8 @@ iframe{
     aspect-ratio: 16/9;
 }
 
-.text-section{
-    margin-inline: 1vh;
-}
-
 h2{
-    font-family:monospace;
     font-size: 3vh;
-}
-h4{
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-weight: 500;
-    font-size: 1.7vh;
-}
-
-p{
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-weight: 400;
-    font-size: 2vh;
 }
 
 @media (max-width:100vh){
