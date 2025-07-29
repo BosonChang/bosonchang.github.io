@@ -32,3 +32,12 @@ p{
 hr{
     margin-bottom: 2vh;
 }
+.post .headline{
+    display: flex;
+    align-items: baseline;
+    gap: .5vw;
+    margin-bottom: 1vh;
+}
+.post h2{
+    font-size: 3vh;
+}

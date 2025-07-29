@@ -30,10 +30,6 @@ iframe{
     aspect-ratio: 16/9;
 }
 
-h2{
-    font-size: 3vh;
-}
-
 @media (max-width:100vh){
     #content-area{
         grid-template-columns: repeat(1, 1fr);
