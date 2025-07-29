@@ -1,12 +1,11 @@
 #content-area{
-    /* background-image: url("/bosonchang.github.io/bc/imgs/bg3.png"); */
     background-color: black;
     background-size:cover;
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-direction: row;
     overflow-block: clip;
+    position: relative;
+    z-index: 0;
 }
 
 #poster-container{
@@ -21,26 +20,24 @@
     pointer-events: none;
 }
 
+.poster-header{
+    color: white;
+    font-size:10vw;
+    margin-inline: 2vw;
+    z-index: -1;
+    position: absolute;
+    top: 35%;
+}
+
 #poster-hitbox{
     margin: auto;
     width: 25%;
-    aspect-ratio: 1/1;
+    height: 100%;
     pointer-events: auto;
 }
 
 #poster-container:hover{
     background-image: url("../imgs/coloered-subject.png");
     scale: 1.1;
-    transition-duration: 300ms;
+    transition-duration: 500ms;
 }
-
-/* img{
-    margin-inline: auto;
-    transition: 50ms;
-}
-
-img:hover{
-    src: url("/bosonchang.github.io/bc/imgs/coloered-subject.png");
-    scale: 1.1;
-    transition-duration: 100ms;
-} */
