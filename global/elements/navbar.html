@@ -5,7 +5,7 @@
     <script type="module" src="global/scripts/navbar.js"></script>
 </head>
 
-<nav onclick="dropDown()">
+<nav id="navbar" onclick="dropDown()">
     <h1>Boson Chang</h1>
     <ul id="navlist">
         <li><a href="../bc">BC</a></li>
@@ -17,14 +17,7 @@
 </nav>
 
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-
-    }
-
-
-    h1 {
+    #navbar h1 {
         color: white;
         font-size: 5vh;
         font-family: "Italianno", cursive;
@@ -33,31 +26,26 @@
         user-select: none;
     }
 
-    nav {
+    #navbar {
         background-color: black;
         width: 100vw;
         height: 7vh;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 0 3vw;
+        padding: 0 1vw;
         box-sizing: border-box;
     }
 
-    ul {
+    #navlist {
         display: flex;
         gap: 3vw;
-        list-style: none;
         align-items: center;
         flex-wrap: wrap;
     }
 
-    li {
-        display: inline-block;
-    }
-
     @media (max-width: 100vh) {
-        nav {
+        #navbar {
             flex-direction: column;
             height: auto;
             align-items: center;
@@ -65,23 +53,18 @@
             z-index: 2;
         }
 
-        ul {
+        #navlist {
             display: none;
         }
 
-        li {
-            display: block;
-        }
-
-        h1 {
+        #navbar h1 {
             font-size: 4vh;
             margin-bottom: 1vh;
         }
     }
 
-    a {
+    #navlist li a {
         color: white;
-        text-decoration: none;
         font-size: 2.5vh;
         font-family: "Italianno", cursive;
         font-weight: 400;

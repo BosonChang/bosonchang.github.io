@@ -6,6 +6,12 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("navbar").innerHTML = data;
     })
     .catch(error => console.error("Failed to load navbar:", error));
+  fetch("../global/elements/footer.html")
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("footer").innerHTML = data;
+    })
+    .catch(error => console.error("Failed to load footer:", error));
 });
 
 // Navbar Behavior

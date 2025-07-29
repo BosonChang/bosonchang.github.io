@@ -1,15 +1,54 @@
 <footer>
-    <hr>
-    <ul>
-        <li><a href="../bc">BC</a></li>
-        <li><a href="../tabletennis">Table Tennis</a></li>
-        <li><a href="../cinema">Cinema</a></li>
-        <li><a href="../gallery">Gallery</a></li>
-    </ul>
+    <hr style="width: 95%;margin: auto;">
+    <div id="footer-navlists">
+        <ul>
+            <h4>Pages</h4>
+            <li><a href="../bc">BC</a></li>
+            <li><a href="../tabletennis">Table Tennis</a></li>
+            <li><a href="../cinema">Cinema</a></li>
+            <li><a href="../gallery">Gallery</a></li>
+            <li><a href="../contact">Contact</a></li>
+        </ul>
+        <ul>
+            <h4>Channels</h4>
+            <li><a href="">Personal Channel</a></li>
+            <li><a href="">Table Tennis Channel</a></li>
+            <li><a href="">Filmmaking Channel</a></li>
+            <li><a href="">Gaming Channel</a></li>
+            <li><a href="">Instagram</a></li>
+        </ul>
+    </div>
+
 </footer>
 
 <style>
     footer {
         width: 100vw;
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 3vh;
+    }
+
+    #footer-navlists{
+        display: flex;
+        flex-direction: row;
+        margin:auto;
+        margin-top: 1vh;
+        gap: 3vw;
+    }
+    #footer-navlists h4{
+        margin-bottom: 2vh;
+        text-transform:uppercase;
+    }
+    #footer-navlists li{
+        margin-top: 1vh;
+    }
+    
+    #footer-navlists li a{
+        color: rgb(77, 77, 77);
+    }
+    #footer-navlists li a:hover{
+        color: black;
     }
 </style>
