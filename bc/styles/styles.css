@@ -1,12 +1,13 @@
-html{
+html {
     scroll-behavior: smooth;
 }
-#content-area{
+
+#content-area {
     width: 100%;
     height: 100%;
 }
 
-#poster-area{
+#poster-area {
     width: 100%;
     height: 93vh;
     overflow-block: clip;
@@ -15,18 +16,18 @@ html{
 }
 
 @media (max-width:100vh) {
-    #poster-area{
+    #poster-area {
         aspect-ratio: 16/7.5;
         height: auto;
     }
 }
 
-#poster-container{
+#poster-container {
     background-image: url("../imgs/bw-subject.png");
-    background-size:contain;
+    background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    width:100%;
+    width: 100%;
     height: 100%;
     transition-duration: 300ms;
     display: flex;
@@ -35,29 +36,29 @@ html{
     position: relative;
 }
 
-.poster-header{
+.poster-header {
     color: white;
-    font-size:10vw;
+    font-size: 10vw;
     margin-inline: 2vw;
     z-index: 1;
     position: absolute;
     margin-top: 15%;
 }
 
-#poster-hitbox{
+#poster-hitbox {
     margin: auto;
     width: 25%;
     height: 100%;
     pointer-events: auto;
 }
 
-#poster-container:hover{
+#poster-container:hover {
     background-image: url("../imgs/coloered-subject.png");
     scale: 1.1;
     transition-duration: 500ms;
 }
 
-#information{
+#information {
     width: 100%;
     height: 100vh;
     position: relative;
@@ -65,57 +66,59 @@ html{
     flex-direction: row;
 }
 
-#menu h1{
-    margin: 1vw;
-}
-
-#menu{
+#menu {
     width: 15vw;
+    h1 {
+            margin: 1vw;
+        }
+    a {
+        color: rgb(77, 77, 77);
+    }
+
+    a:hover {
+        color: black;
+    }
+
+    ul li {
+        display: block;
+        padding: 2vh;
+        z-index: 0;
+        position: relative;
+    }
+
+    ul li:hover>hr {
+        width: 13vw;
+        transition-duration: 200ms;
+    }
+
+    ul li:hover>ul {
+        display: block;
+    }
+
+    hr {
+        margin: 0;
+        width: 100%;
+        min-width: 13vw;
+    }
+
+    .hiddenhr {
+        width: 50%;
+        min-width: 0px;
+        margin-top: .2vh;
+    }
+
+    ul li ul {
+        display: none;
+        position: absolute;
+        left: 13vw;
+        top: 0%;
+        width: 10vw;
+    }
 }
 
-ul a{
-    color: rgb(77, 77, 77);
-}
 
-ul a:hover{
-    color: black;
-}
 
-ul li{
-    display: block;
-    padding: 2vh;
-    z-index: 0;
-    position: relative;
-}
-ul li:hover> hr{
-    width: 13vw;
-    transition-duration: 200ms;
-}
-ul li:hover > ul{
-    display: block;
-}
-
-hr{
-    margin: 0;
-    width: 100%;
-    min-width: 13vw;
-}
-
-.hiddenhr{
-    width: 50%;
-    min-width: 0px;
-    margin-top: .2vh;
-}
-
-ul li ul{
-    display: none;
-    position: absolute;
-    left: 13vw;
-    top: 0%;
-    width: 10vw;
-}
-
-#wiki{
-    width: 100%;
+#wiki {
+    width: 90vw;
     height: 100%;
 }

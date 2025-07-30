@@ -32,7 +32,7 @@ function dropDown() {
 window.dropDown = dropDown;
 window.addEventListener("resize", checkSize);
 function checkSize() {
-  const navli = document.getElementById("navlist");
+  var navli = document.getElementById("navlist");
   if (window.innerWidth > window.innerHeight) {
     navli.style.display = "flex";
     dropped = true;
