@@ -79,7 +79,6 @@ html {
     a:hover {
         color: black;
     }
-
     ul li {
         display: block;
         padding: 2vh;
@@ -130,7 +129,7 @@ html {
     height: 100%;
 }
 
-#about-me{
+.sect{
     width: 100%;
     min-height: 100vh;
     height: fit-content;
@@ -141,5 +140,8 @@ html {
     }
     img{
         margin-inline: 1vw;
+    }
+    .subsect{
+        width: 100%; min-height: 90vh; display: flex; flex-direction: row;
     }
 }
