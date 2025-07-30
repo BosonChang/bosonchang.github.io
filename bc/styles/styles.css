@@ -59,11 +59,12 @@ html {
 }
 
 #information {
-    width: 100%;
+    width: 95vw;
     min-height: 100vh;
     position: relative;
     display: flex;
     flex-direction: row;
+    margin: auto;
 }
 
 #menu {
@@ -133,7 +134,12 @@ html {
     width: 100%;
     min-height: 100vh;
     height: fit-content;
+    display: flex;
+    flex-direction: column;
     h2{
         margin-top: 2vh;
+    }
+    img{
+        margin-inline: 1vw;
     }
 }
