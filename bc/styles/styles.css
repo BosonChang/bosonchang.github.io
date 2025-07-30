@@ -84,6 +84,7 @@ html {
         padding: 2vh;
         z-index: 0;
         position: relative;
+        min-width: 13vw;
     }
 
     ul li:hover>hr {
@@ -114,6 +115,11 @@ html {
         top: 0%;
         width: 10vw;
     }
+    ul li ul li{
+        background-color: white;
+        min-width: 13vw;
+        padding-left: 0;
+    }
 }
 
 
@@ -121,4 +127,19 @@ html {
 #wiki {
     width: 90vw;
     height: 100%;
+}
+
+#about-me{
+    width: 100%;
+    min-height: 100vh;
+    height: fit-content;
+    h2{
+        margin-top: 2vh;
+    }
+    img{
+        float: left;
+    }
+    p{
+        float: left;
+    }
 }
