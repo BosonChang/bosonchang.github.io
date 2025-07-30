@@ -1,4 +1,6 @@
-
+html{
+    scroll-behavior: smooth;
+}
 #content-area{
     width: 100%;
     height: 100%;
@@ -59,4 +61,61 @@
     width: 100%;
     height: 100vh;
     position: relative;
+    display: flex;
+    flex-direction: row;
+}
+
+#menu h1{
+    margin: 1vw;
+}
+
+#menu{
+    width: 15vw;
+}
+
+ul a{
+    color: rgb(77, 77, 77);
+}
+
+ul a:hover{
+    color: black;
+}
+
+ul li{
+    display: block;
+    padding: 2vh;
+    z-index: 0;
+    position: relative;
+}
+ul li:hover> hr{
+    width: 13vw;
+    transition-duration: 200ms;
+}
+ul li:hover > ul{
+    display: block;
+}
+
+hr{
+    margin: 0;
+    width: 100%;
+    min-width: 13vw;
+}
+
+.hiddenhr{
+    width: 50%;
+    min-width: 0px;
+    margin-top: .2vh;
+}
+
+ul li ul{
+    display: none;
+    position: absolute;
+    left: 13vw;
+    top: 0%;
+    width: 10vw;
+}
+
+#wiki{
+    width: 100%;
+    height: 100%;
 }
