@@ -58,6 +58,13 @@ html {
     transition-duration: 500ms;
 }
 
+@media (max-width: 100vh) {
+    #poster-container:hover {
+        background-image: url("../imgs/coloered-subject.png");
+        transition-duration: 500ms;
+    }
+}
+
 #information {
     width: 95vw;
     min-height: 100vh;
@@ -70,9 +77,11 @@ html {
 
 #menu {
     flex: 1;
+
     h1 {
-            margin: 1vw;
-        }
+        margin: 1vw;
+    }
+
     a {
         color: rgb(77, 77, 77);
     }
@@ -80,6 +89,7 @@ html {
     a:hover {
         color: black;
     }
+
     ul li {
         display: block;
         padding: 2vh;
@@ -116,7 +126,8 @@ html {
         top: 0%;
         width: 10vw;
     }
-    ul li ul li{
+
+    ul li ul li {
         background-color: white;
         min-width: 10vw;
         padding-left: 0;
@@ -130,21 +141,36 @@ html {
     height: 100%;
 }
 
-.sect{
+.sect {
     width: 100%;
     min-height: 100vh;
     height: fit-content;
     display: flex;
     flex-direction: column;
-    h2{
+
+    h2 {
         margin-top: 2vh;
     }
-    .subsect{
-        width: 100%; min-height: 100vh; display: flex; flex-direction: row;
+
+    .subsect {
+        width: 100%;
+        min-height: 120vh;
+        display: flex;
+        flex-direction: row;
     }
+
     @media (max-width: 100vh) {
-        .subsect{
+        .subsect {
             min-height: 50vh;
         }
     }
+}
+
+.material-symbols-outlined:active{
+    color: black;
+
+}
+
+a:active{
+    color: black;
 }
