@@ -65,6 +65,7 @@ html {
     display: flex;
     flex-direction: row;
     margin: auto;
+    margin-top: 2vh;
 }
 
 #menu {
@@ -138,10 +139,12 @@ html {
     h2{
         margin-top: 2vh;
     }
-    img{
-        margin-inline: 1vw;
-    }
     .subsect{
-        width: 100%; min-height: 90vh; display: flex; flex-direction: row;
+        width: 100%; min-height: 100vh; display: flex; flex-direction: row;
+    }
+    @media (max-width: 100vh) {
+        .subsect{
+            min-height: 50vh;
+        }
     }
 }
