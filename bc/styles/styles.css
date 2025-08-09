@@ -174,3 +174,9 @@ html {
 a:active{
     color: black;
 }
+
+h2{
+    font-weight: 500;
+    font-size: 2vh;
+    font-family:'Courier New', Courier, monospace;
+}
