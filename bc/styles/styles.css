@@ -84,6 +84,9 @@ html {
 
     a {
         color: rgb(77, 77, 77);
+        font-family: "Lugrasimo", cursive;
+        font-weight: 400;
+        font-style: normal;
     }
 
     a:hover {
@@ -139,6 +142,12 @@ html {
 #wiki {
     flex: 9;
     height: 100%;
+
+    h1 {
+        font-family: "Lugrasimo", cursive;
+        font-weight: 400;
+        font-style: normal;
+    }
 }
 
 .sect {
@@ -166,17 +175,48 @@ html {
     }
 }
 
-.material-symbols-outlined:active{
+#education {
+    h3 {
+        margin-top: 3vh;
+        text-decoration: underline;
+    }
+
+    h2{
+        font-family: caveat;
+        font-size: 3vh;
+    }
+
+    ul li ul li {
+        list-style: decimal;
+    }
+}
+
+/* general */
+
+.material-symbols-outlined:active {
     color: black;
 
 }
 
-a:active{
+a:active {
     color: black;
 }
 
-h2{
+.monospace {
     font-weight: 500;
     font-size: 2vh;
-    font-family:'Courier New', Courier, monospace;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.lugrasimo {
+    font-family: "Lugrasimo", cursive;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.caveat {
+    font-family: "Caveat", cursive;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
 }
