@@ -181,7 +181,7 @@ html {
         text-decoration: underline;
     }
 
-    h2{
+    h2 {
         font-family: caveat;
         font-size: 3vh;
     }
@@ -219,4 +219,27 @@ a:active {
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
+}
+
+#education ul li ul {
+    display: flex;
+    flex-direction: row;
+    gap: 1vw;
+    justify-content: center;
+}
+
+#education ul li ul li {
+    display: block;
+    list-style: none;
+    color: white;
+    background-color: black;
+    border: 1px black solid;
+    border-radius: 10px;
+    padding: 1vw;
+    transition: 200ms;
+}
+
+#education ul li ul li:hover {
+    scale: 1.1;
+    transition-duration: 500ms;
 }
