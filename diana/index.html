@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Diana
+  </title>
+  <script type="module" src="../global/scripts/navbar.js"></script>
+  <script type="module" src="scripts/cardClick.js"></script>
+    <script type="module" src="scripts/firework.js"></script>
+  <link rel="stylesheet" href="../global/styles/style.css">
+  <link rel="stylesheet" href="styles/styles.css">
+</head>
+
+<body>
+  
+  <div id="navbar"></div>
+  <div style="height: 93vh; width: 100vw; display: flex; align-items: center; justify-content: center;" id="content-area">
+    
+    <div style="position: absolute; z-index: -2; width: 100%; height: 100%; top: 0;">
+      <canvas id="canvas" style="opacity: 0;"></canvas>
+    </div>
+    <div style="position: absolute; z-index: -1; width: 100%; height: 100%; top: 0; display: flex; text-align: center; align-items: center; justify-content: center;">
+      <h1 id="hbd" style="opacity:0; color: white; font-size: 10vw;">Happy Birthday<br>♥️冯靖祎♥️<br>♥️Diana♥️</h1>
+    </div>
+    
+    <div id="card" style="width: 30vw; border-radius: 1vw; border-style:groove; border-color: palevioletred; border-width: 1vw;">
+      <div class="card-front">
+        <img src="imgs/on-my-back.jpg" style=" width: 100%; display: block; user-select: none;">
+      </div>
+      <div class="card-back" style="display: flex; align-items: center; justify-content: center; gap: 2vw;">
+        <div style="flex: 1;"></div>
+        <div style="flex: 2; display: flex; gap: .5vw;">
+          <label for="password" style="flex: 1;">Password:</label>
+          <input type="text" id="txtbox" name="password" style="flex: 1;" placeholder="Password">
+        </div>
+        <button id="unlock" style="flex: 1; user-select: none;">Unlock</button>
+        <div style="flex: 1;"></div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>
