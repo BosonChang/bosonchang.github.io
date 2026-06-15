@@ -31,7 +31,7 @@ unlock.addEventListener("click", (event) => {
             if (opacity <= 0) {
                 card.remove()
                 firework()
-                open("https://c6.y.qq.com/base/fcgi-bin/u?__=aM9TCwdv7ISy")
+                open("https://www.bilibili.com/video/BV1Xc411975r/?spm_id_from=333.337.search-card.all.click")
                 clearInterval(fadeOut);
                 
                 return;
