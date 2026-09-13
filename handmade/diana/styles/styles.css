@@ -1,0 +1,38 @@
+#content-area{
+    background: linear-gradient(180, transparent 0, black 100%);
+}
+
+#card{
+    scale:1;
+    transition: 1.5s;
+    position: relative;
+    transform-style: preserve-3d;
+}
+
+#card:hover{
+    scale: 1.1;
+    transition: 150ms;
+}
+
+.card-front, .card-back{
+    width: 100%;
+    backface-visibility: hidden;
+}
+
+.card-back{
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    background-color: pink;
+    transform: rotateY(180deg);
+}
+
+
+body {
+    overflow: hidden;
+    margin: 0;
+}

@@ -11,8 +11,48 @@ html {
     width: 100%;
     height: 93vh;
     overflow-block: clip;
-    background-color: black;
+    background-color: #f4f0e6;
+    border-bottom: 5px double #1a1a1a;
+    position: relative;
     z-index: 0;
+}
+
+.masthead-meta {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 1vw;
+    padding: 1.2vh 3vw;
+    font-family: "PT Serif", Georgia, serif;
+    font-size: 1.4vh;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    background: #f4f0e6;
+    border-bottom: 1px solid #1a1a1a;
+    z-index: 3;
+}
+
+#poster-banner {
+    position: absolute;
+    left: 50%;
+    bottom: 9%;
+    transform: translateX(-50%);
+    font-family: "Playfair Display", "Times New Roman", serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: 5vw;
+    letter-spacing: 0.02em;
+    color: #1a1a1a;
+    border-top: 5px double #1a1a1a;
+    border-bottom: 5px double #1a1a1a;
+    padding: 0.3vh 4vw;
+    background: rgba(244, 240, 230, 0.82);
+    z-index: 3;
+    pointer-events: none;
+    white-space: nowrap;
 }
 
 @media (max-width:100vh) {
@@ -26,7 +66,7 @@ html {
     background-image: url("../imgs/bw-subject.png");
     background-size: contain;
     background-repeat: no-repeat;
-    background-position: center;
+    background-position: 66% center;
     width: 100%;
     height: 100%;
     transition-duration: 300ms;
@@ -37,7 +77,10 @@ html {
 }
 
 .poster-header {
-    color: white;
+    color: #1a1a1a;
+    font-family: "Playfair Display", "Times New Roman", Georgia, serif;
+    font-weight: 900;
+    text-transform: uppercase;
     font-size: 10vw;
     margin-inline: 2vw;
     z-index: 1;
@@ -83,10 +126,13 @@ html {
     }
 
     a {
-        color: rgb(77, 77, 77);
-        font-family: "Lugrasimo", cursive;
-        font-weight: 400;
+        color: rgb(60, 60, 60);
+        font-family: "Playfair Display", "Times New Roman", Georgia, serif;
+        font-weight: 700;
         font-style: normal;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 1.7vh;
     }
 
     a:hover {
@@ -144,10 +190,27 @@ html {
     height: 100%;
 
     h1 {
-        font-family: "Lugrasimo", cursive;
-        font-weight: 400;
+        font-family: "Playfair Display", "Times New Roman", Georgia, serif;
+        font-weight: 900;
         font-style: normal;
+        text-transform: uppercase;
+        letter-spacing: 0.01em;
+        border-bottom: 5px double #1a1a1a;
+        padding-bottom: 0.5vh;
+        margin-bottom: 1vh;
     }
+}
+
+#wiki img {
+    border: 1px solid #1a1a1a;
+    padding: 3px;
+    background: #f4f0e6;
+    box-sizing: border-box;
+}
+
+/* keep photos from touching/overlapping their neighbours */
+.photo-grid > div {
+    gap: 1.5vw;
 }
 
 .sect {
@@ -175,20 +238,26 @@ html {
     }
 }
 
-#education {
-    h3 {
-        margin-top: 3vh;
-        text-decoration: underline;
-    }
+#education h2 {
+    font-family: "Playfair Display", "Times New Roman", Georgia, serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 3.2vh;
+    margin-top: 4vh;
+    padding-bottom: 0.4vh;
+    border-bottom: 3px double #1a1a1a;
+}
 
-    h2 {
-        font-family: caveat;
-        font-size: 3vh;
-    }
-
-    ul li ul li {
-        list-style: decimal;
-    }
+#education h3 {
+    margin-top: 3.5vh;
+    margin-bottom: 0.4vh;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-size: 1.7vh;
+    color: #4a4a4a;
+    border-bottom: 1px solid #1a1a1a;
+    padding-bottom: 0.4vh;
 }
 
 /* general */
@@ -203,9 +272,13 @@ a:active {
 }
 
 .monospace {
-    font-weight: 500;
-    font-size: 2vh;
-    font-family: 'Courier New', Courier, monospace;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 1.7vh;
+    font-family: "PT Serif", Georgia, "Times New Roman", serif;
+    text-align: center;
+    margin-top: 0.6vh;
+    color: #3a3a3a;
 }
 
 .lugrasimo {
@@ -221,25 +294,42 @@ a:active {
     font-style: normal;
 }
 
+/* course catalogue: printed columns, not pill buttons */
 #education ul li ul {
-    display: flex;
-    flex-direction: row;
-    gap: 1vw;
-    justify-content: center;
+    display: block;
+    columns: 2;
+    column-gap: 3vw;
+    column-rule: 1px solid #cfc7b6;
+    margin-top: 0.6vh;
+}
+
+@media (max-width: 100vh) {
+    #education ul li ul {
+        columns: 1;
+    }
 }
 
 #education ul li ul li {
     display: block;
     list-style: none;
-    color: white;
-    background-color: black;
-    border: 1px black solid;
-    border-radius: 10px;
-    padding: 1vw;
-    transition: 200ms;
+    color: #1a1a1a;
+    background: none;
+    border: 0;
+    border-radius: 0;
+    border-bottom: 1px dotted #a89f8b;
+    padding: 0.7vh 0;
+    font-family: "PT Serif", Georgia, serif;
+    font-size: 1.7vh;
+    line-height: 1.35;
+    break-inside: avoid;
+    transition: background-color 150ms ease, color 150ms ease;
 }
 
 #education ul li ul li:hover {
-    scale: 1.1;
-    transition-duration: 500ms;
+    background-color: #1a1a1a;
+    color: #f4f0e6;
+}
+
+#education a {
+    color: inherit;
 }

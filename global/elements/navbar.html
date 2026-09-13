@@ -1,12 +1,19 @@
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Italianno&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&display=swap"
+        rel="stylesheet">
     <script type="module" src="global/scripts/navbar.js"></script>
 </head>
 
 <nav id="navbar" onclick="dropDown()">
+    <div id="masthead-top">
+        <span>Vol. XXI &nbsp;&#10033;&nbsp; No. 190</span>
+        <span>Est. MMXXV</span>
+        <span>bosonchang.github.io</span>
+    </div>
     <h1>Boson Chang</h1>
+    <div id="masthead-sub">&#10033;&ensp;All the Life That's Fit to Print&ensp;&#10033;</div>
     <ul id="navlist">
         <li><a href="../bc">BC</a></li>
         <li><a href="../diana">Diana</a></li>
@@ -18,59 +25,96 @@
 </nav>
 
 <style>
+    #navbar {
+        background-color: #f4f0e6;
+        color: #1a1a1a;
+        width: 100vw;
+        box-sizing: border-box;
+        padding: 1.2vh 3vw 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border-bottom: 5px double #1a1a1a;
+        z-index: 999;
+        font-family: "Playfair Display", "Times New Roman", Georgia, serif;
+    }
+
     #navbar h1 {
-        color: white;
-        font-size: 5vh;
-        font-family: "Italianno", cursive;
-        font-weight: 400;
-        font-style: normal;
+        color: #1a1a1a;
+        font-size: 6.5vh;
+        font-weight: 900;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        text-align: center;
+        line-height: 1;
         user-select: none;
     }
 
-    #navbar {
-        background-color: black;
-        width: 100vw;
-        height: 7vh;
+    #masthead-top {
+        width: 100%;
         display: flex;
-        align-items: center;
         justify-content: space-between;
-        padding: 0 1vw;
-        box-sizing: border-box;
-        z-index: 999;
+        gap: 1vw;
+        font-size: 1.3vh;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        border-bottom: 1px solid #1a1a1a;
+        padding-bottom: 0.6vh;
+        margin-bottom: 0.7vh;
+    }
+
+    #masthead-sub {
+        font-size: 1.6vh;
+        font-style: italic;
+        letter-spacing: 0.08em;
+        margin: 0.4vh 0 0.9vh;
     }
 
     #navlist {
         display: flex;
-        gap: 3vw;
+        gap: 2.4vw;
         align-items: center;
+        justify-content: center;
         flex-wrap: wrap;
+        width: 100%;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 3px double #1a1a1a;
+        padding: 0.7vh 0;
+    }
+
+    #navlist li a {
+        color: #1a1a1a;
+        font-size: 1.9vh;
+        font-family: "Playfair Display", serif;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        user-select: none;
+    }
+
+    #navlist li a:hover {
+        color: #1a1a1a;
+        text-decoration: underline;
     }
 
     @media (max-width: 100vh) {
         #navbar {
-            flex-direction: column;
-            height: auto;
-            align-items: center;
-            padding: 1vh 3vw;
-            z-index: 2;
+            padding: 1vh 3vw 0;
+        }
+
+        #navbar h1 {
+            font-size: 4.6vh;
+        }
+
+        #masthead-top {
+            font-size: 1.1vh;
+            letter-spacing: 0.12em;
         }
 
         #navlist {
             display: none;
+            flex-direction: column;
+            gap: 1.4vh;
         }
-
-        #navbar h1 {
-            font-size: 4vh;
-            margin-bottom: 1vh;
-        }
-    }
-
-    #navlist li a {
-        color: white;
-        font-size: 2.5vh;
-        font-family: "Italianno", cursive;
-        font-weight: 400;
-        font-style: normal;
-        user-select: none;
     }
 </style>

@@ -1,43 +1,95 @@
-*{
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+:root {
+    --paper: #f4f0e6;
+    --ink: #1a1a1a;
+    --ink-soft: #4a4a4a;
+    --serif-head: "Playfair Display", "Times New Roman", Georgia, serif;
+    --serif-body: "PT Serif", Georgia, "Times New Roman", serif;
+}
+
+* {
     margin: 0;
     padding: 0;
 }
-html{
+
+html {
     overscroll-behavior: none;
     overflow-x: hidden;
     scrollbar-width: none;
 }
-body{
+
+body {
     width: 100vw;
     height: 100%;
+    background-color: var(--paper);
+    color: var(--ink);
+    font-family: var(--serif-body);
+    /* faint newsprint tooth */
+    background-image: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.018) 0 1px, transparent 1px 3px);
 }
-ul{
+
+h1, h2, h3, h4, h5 {
+    font-family: var(--serif-head);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+}
+
+ul {
     list-style: none;
 }
-a{
+
+a {
     text-decoration: none;
+    color: var(--ink);
 }
-p{
+
+a:hover {
+    color: var(--ink-soft);
+}
+
+p {
     font-size: 2vh;
+    line-height: 1.55;
+    text-align: justify;
     word-wrap: break-word;
     hyphens: auto;
     -webkit-hyphens: auto;
 }
-.text-section{
+
+/* newspaper column rule */
+hr {
+    border: 0;
+    border-top: 4px double var(--ink);
+    margin-block: 1vh;
+}
+
+.text-section {
     margin-inline: 1vw;
 }
-.date{
-    font-size: 1.7vh;
+
+.date {
+    font-size: 1.4vh;
+    font-family: var(--serif-body);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--ink-soft);
 }
-.post hr{
+
+.post hr {
     margin-bottom: 2vh;
 }
-.post .headline{
+
+.post .headline {
     display: flex;
     align-items: baseline;
     gap: .5vw;
     margin-bottom: 1vh;
 }
-.post h2{
+
+.post h2 {
     font-size: 3vh;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
 }
