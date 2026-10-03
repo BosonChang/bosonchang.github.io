@@ -38,27 +38,14 @@ body { display: flex; flex-direction: column; }
     flex: 0 0 auto;
     width: 7vh;
     aspect-ratio: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     border: 3px double var(--ink);
-    background: var(--ink);
-    color: var(--paper);
-    font-family: var(--serif-head);
-    font-weight: 900;
-    font-size: 3vh;
-    letter-spacing: 0.05em;
-    user-select: none;
+    object-fit: cover;
 }
 
 .app-info { flex: 1; }
 
 .app-info .headline h2 { margin-bottom: 0; }
 
-.app-card:hover .app-icon {
-    background: var(--paper);
-    color: var(--ink);
-}
 
 @media (max-width: 100vh) {
     .app-grid { grid-template-columns: 1fr; }
