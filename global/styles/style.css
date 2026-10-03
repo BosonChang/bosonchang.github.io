@@ -163,3 +163,124 @@ hr {
 .link-list li:hover a {
     color: var(--paper);
 }
+
+/* Shared newspaper masthead and footer */
+#navbar {
+    background-color: #f4f0e6;
+    color: #1a1a1a;
+    width: 100vw;
+    box-sizing: border-box;
+    padding: 1.2vh 3vw 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-bottom: 5px double #1a1a1a;
+    z-index: 999;
+    font-family: "Playfair Display", "Times New Roman", Georgia, serif;
+}
+
+#navbar h1 {
+    color: #1a1a1a;
+    font-size: 6.5vh;
+    font-weight: 900;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 1;
+    user-select: none;
+}
+
+#masthead-top {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 1vw;
+    font-size: 1.3vh;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    border-bottom: 1px solid #1a1a1a;
+    padding-bottom: 0.6vh;
+    margin-bottom: 0.7vh;
+}
+
+#masthead-sub {
+    font-size: 1.6vh;
+    font-style: italic;
+    letter-spacing: 0.08em;
+    margin: 0.4vh 0 0.9vh;
+}
+
+#navlist {
+    display: flex;
+    gap: 2.4vw;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+    border-top: 1px solid #1a1a1a;
+    border-bottom: 3px double #1a1a1a;
+    padding: 0.7vh 0;
+}
+
+#navlist li a {
+    color: #1a1a1a;
+    font-size: 1.9vh;
+    font-family: "Playfair Display", serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    user-select: none;
+}
+
+#navlist li a:hover {
+    color: #1a1a1a;
+    text-decoration: underline;
+}
+
+footer {
+    width: 100vw;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 3vh;
+    margin-top: 3vh;
+    position: relative;
+}
+
+.footer-rule { width: 95%; margin-inline: auto; }
+
+#footer-navlists {
+    display: flex;
+    flex-direction: row;
+    margin: auto;
+    gap: 3vw;
+}
+
+#footer-navlists section { display: flex; flex-direction: column; }
+#footer-navlists ul { background-color: unset; }
+
+#footer-navlists h4 {
+    margin-bottom: 2vh;
+    text-transform: uppercase;
+    font-family: "Playfair Display", "Times New Roman", Georgia, serif;
+    font-weight: 900;
+    letter-spacing: .15em;
+    font-size: larger;
+}
+
+#footer-navlists ul li {
+    margin: 0;
+    padding: 0;
+    margin-top: 1vh;
+    background-color: unset;
+}
+
+#footer-navlists li a { color: rgb(77, 77, 77); }
+#footer-navlists li a:hover { color: black; }
+
+@media (max-width: 100vh) {
+    #navbar { padding: 1vh 3vw 0; }
+    #navbar h1 { font-size: 4.6vh; }
+    #masthead-top { font-size: 1.1vh; letter-spacing: 0.12em; }
+    #navlist { display: none; flex-direction: column; gap: 1.4vh; }
+}
