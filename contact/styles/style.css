@@ -1,0 +1,19 @@
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+#content-area {
+    width: 95vw;
+    min-height: 93vh;
+    margin: 2vh auto 0;
+}
+
+.post {
+    margin-bottom: 3vh;
+}
+
+.link-list li {
+    width: fit-content;
+    min-width: 20vw;
+}
