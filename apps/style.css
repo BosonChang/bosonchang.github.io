@@ -1,0 +1,29 @@
+body { display: flex; flex-direction: column; }
+
+#content-area { width: 95vw; min-height: 93vh; margin: 2vh auto 0; }
+
+#content-area > h1 {
+    font-size: 6vh;
+    text-transform: uppercase;
+    border-bottom: 5px double var(--ink);
+    padding-bottom: 0.5vh;
+    margin-bottom: 2vh;
+}
+
+.app-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3vw; }
+
+.post {
+    display: block;
+    border: 1px solid var(--ink);
+    padding: 1.5vh 1vw;
+    box-shadow: 0 0 0 black;
+    transition-duration: 50ms;
+}
+
+.post:hover { box-shadow: 0 0 5px black; scale: 1.03; transition-duration: 100ms; }
+
+.post h2 { margin-bottom: 1vh; }
+
+.back { display: inline-block; margin-top: 3vh; font-size: 1.9vh; text-transform: uppercase; letter-spacing: 0.16em; font-weight: 700; }
+
+@media (max-width: 100vh) { .app-grid { grid-template-columns: 1fr; } }
