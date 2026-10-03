@@ -1,0 +1,4 @@
+# Local operating-system and browser artifacts
+.DS_Store
+Thumbs.db
+.playwright-cli/
