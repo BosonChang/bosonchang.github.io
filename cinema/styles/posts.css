@@ -40,3 +40,12 @@
 hr {
   margin: 2vh;
 }
+
+@media (max-width: 100vh) {
+  .post .frame-container {
+    float: none;
+    width: 100%;
+    margin-inline: 0;
+    aspect-ratio: 16/9;
+  }
+}

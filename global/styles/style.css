@@ -93,3 +93,73 @@ hr {
     text-transform: uppercase;
     letter-spacing: 0.02em;
 }
+
+/* ---------- shared components (all pages) ---------- */
+
+/* big section headline at the top of a page */
+.page-header {
+    grid-column: 1 / -1;
+    width: 100%;
+    font-size: 6vh;
+    text-transform: uppercase;
+    border-bottom: 5px double var(--ink);
+    padding-bottom: 0.5vh;
+    margin-bottom: 2vh;
+}
+
+/* sub-headings inside article-style content */
+#content-area > h2 {
+    font-size: 2.8vh;
+    margin-top: 3vh;
+    margin-bottom: 0.6vh;
+}
+
+/* "back" / navigation links at the foot of an article */
+.back {
+    display: inline-block;
+    margin-top: 3vh;
+    margin-right: 2vw;
+    font-family: var(--serif-head);
+    font-size: 1.9vh;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+}
+
+.back:hover {
+    text-decoration: underline;
+}
+
+/* keep floated frames inside their post block */
+.post::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+/* breathing room for text inside post cards */
+.post .text-section {
+    margin-inline: 0;
+    padding: 1.2vh 1vw 1.6vh;
+}
+
+/* dotted-rule link list */
+.link-list li {
+    border-bottom: 1px dotted #a89f8b;
+    padding: 0.7vh 0.4vw;
+    font-size: 2vh;
+    transition: background-color 150ms ease, color 150ms ease;
+}
+
+.link-list li a {
+    display: block;
+}
+
+.link-list li:hover {
+    background-color: var(--ink);
+    color: var(--paper);
+}
+
+.link-list li:hover a {
+    color: var(--paper);
+}
