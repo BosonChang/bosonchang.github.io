@@ -43,7 +43,7 @@ html {
     font-family: "Playfair Display", "Times New Roman", serif;
     font-weight: 900;
     text-transform: uppercase;
-    font-size: 5vw;
+    font-size: clamp(2.5rem, 5vw, 5.5rem);
     letter-spacing: 0.02em;
     color: #1a1a1a;
     border-top: 5px double #1a1a1a;
@@ -69,7 +69,7 @@ html {
     background-position: 66% center;
     width: 100%;
     height: 100%;
-    transition-duration: 300ms;
+    transition: background-image 300ms ease, transform 500ms ease;
     display: flex;
     pointer-events: none;
     z-index: 2;
@@ -81,7 +81,7 @@ html {
     font-family: "Playfair Display", "Times New Roman", Georgia, serif;
     font-weight: 900;
     text-transform: uppercase;
-    font-size: 10vw;
+    font-size: clamp(4.5rem, 10vw, 11rem);
     margin-inline: 2vw;
     z-index: 1;
     position: absolute;
@@ -95,10 +95,14 @@ html {
     pointer-events: auto;
 }
 
-#poster-container:hover {
+#poster-hitbox:focus-visible {
+    outline-offset: -8px;
+}
+
+#poster-container:hover,
+#poster-container:focus-within {
     background-image: url("../imgs/coloered-subject.png");
-    scale: 1.1;
-    transition-duration: 500ms;
+    transform: scale(1.06);
 }
 
 @media (max-width: 100vh) {
@@ -109,7 +113,7 @@ html {
 }
 
 #information {
-    width: 95vw;
+    width: min(95vw, 96rem);
     min-height: 100vh;
     position: relative;
     display: flex;
@@ -332,4 +336,65 @@ a:active {
 
 #education a {
     color: inherit;
+}
+
+@media (max-width: 48rem) {
+    #poster-area {
+        min-height: 32rem;
+        height: 68svh;
+        aspect-ratio: auto;
+    }
+
+    .masthead-meta {
+        padding-inline: 1rem;
+        font-size: 0.62rem;
+        letter-spacing: 0.08em;
+    }
+
+    .masthead-meta span:nth-child(2) { display: none; }
+
+    .poster-header {
+        margin-top: 24%;
+        margin-inline: 0.75rem;
+        font-size: clamp(3.8rem, 18vw, 5.5rem);
+    }
+
+    .poster-header + .poster-header { margin-top: 42%; }
+
+    #poster-container {
+        background-position: center bottom;
+        transform-origin: center bottom;
+    }
+
+    #poster-banner {
+        right: 1rem;
+        left: 1rem;
+        transform: none;
+        font-size: clamp(2.2rem, 12vw, 3.5rem);
+        text-align: center;
+        white-space: normal;
+    }
+
+    #information > a[href="#menu"],
+    #menu {
+        display: none !important;
+    }
+
+    .sect .subsect {
+        min-height: 0;
+        flex-direction: column;
+    }
+
+    #about-me > .subsect:first-of-type > div:not(#menu) {
+        padding-block: 1rem;
+        border-top: 1px solid var(--ink);
+    }
+
+    #about-me > .subsect:first-of-type img {
+        width: 45% !important;
+        margin: 0 1rem 0.5rem 0 !important;
+    }
+
+    .photo-grid > div { flex-wrap: wrap; }
+    #education ul li ul { columns: 1; }
 }
