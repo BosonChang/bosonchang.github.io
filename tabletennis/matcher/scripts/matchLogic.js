@@ -73,91 +73,182 @@ function sideDistance(rubber, target) {
   );
 }
 
-// Scans the pools for the blade + forehand + backhand combination closest to the
-// targets { speed, spin, control, weight, forehand?, backhand? }. The optional
-// forehand/backhand targets add a per-rubber distance for the advanced mode.
-// catalog.forehands / catalog.backhands optionally narrow each side (e.g. a locked
-// pick); they default to catalog.rubbers. Deterministic: iterates in a fixed order
-// and keeps the first strictly-closer match.
+// Rubber pairs are indexed once per pair of pools: stats of every (forehand, backhand) pair in
+// flat typed arrays, bucketed by pair spin (0.01 wide). The index only depends on the pools, not
+// on the targets, so slider moves reuse it.
+const SPIN_BUCKET = 0.01;
+const SPIN_BUCKETS = 1101;
+let pairCache = { key: "", index: null };
+
+function pairIndex(forehands, backhands) {
+  const key = forehands.map((f) => f.id).join(",") + "|" + backhands.map((h) => h.id).join(",");
+  if (pairCache.key === key) return pairCache.index;
+  const nh = backhands.length;
+  const n = forehands.length * nh;
+  const speed = new Float64Array(n);
+  const spin = new Float64Array(n);
+  const control = new Float64Array(n);
+  const fIndex = new Int32Array(n);
+  const hIndex = new Int32Array(n);
+  const bucketOf = new Int32Array(n);
+  const starts = new Int32Array(SPIN_BUCKETS + 1);
+  const range = { speed: [Infinity, -Infinity], spin: [Infinity, -Infinity], control: [Infinity, -Infinity] };
+  const widen = (name, value) => {
+    if (value < range[name][0]) range[name][0] = value;
+    if (value > range[name][1]) range[name][1] = value;
+  };
+  for (let f = 0; f < forehands.length; f += 1) {
+    for (let h = 0; h < nh; h += 1) {
+      const p = f * nh + h;
+      speed[p] = forehands[f].speed * 0.35 + backhands[h].speed * 0.25;
+      spin[p] = forehands[f].spin * 0.6 + backhands[h].spin * 0.4;
+      control[p] = forehands[f].control * 0.3 + backhands[h].control * 0.3;
+      fIndex[p] = f;
+      hIndex[p] = h;
+      bucketOf[p] = clamp(Math.floor(spin[p] / SPIN_BUCKET), 0, SPIN_BUCKETS - 1);
+      starts[bucketOf[p] + 1] += 1;
+      widen("speed", speed[p]);
+      widen("spin", spin[p]);
+      widen("control", control[p]);
+    }
+  }
+  for (let k = 0; k < SPIN_BUCKETS; k += 1) starts[k + 1] += starts[k];
+  const fill = starts.slice(0, SPIN_BUCKETS);
+  const order = new Int32Array(n);
+  for (let p = 0; p < n; p += 1) order[fill[bucketOf[p]]++] = p;
+  // Within a bucket, pairs are ordered by speed so a speed window can be found by binary search.
+  for (let k = 0; k < SPIN_BUCKETS; k += 1) {
+    if (starts[k + 1] - starts[k] > 1) order.subarray(starts[k], starts[k + 1]).sort((x, y) => speed[x] - speed[y]);
+  }
+  const index = { n, speed, spin, control, fIndex, hIndex, starts, order, range };
+  pairCache = { key, index };
+  return index;
+}
+
+// Distance from 0 to the interval [lo, hi].
+function gapToZero(lo, hi) {
+  if (lo > 0) return lo;
+  if (hi < 0) return -hi;
+  return 0;
+}
+
+// Finds the blade + forehand + backhand combination closest to the targets
+// { speed, spin, control, weight, forehand?, backhand? }. The optional forehand/backhand
+// targets add a per-rubber distance for the advanced mode. catalog.forehands / catalog.backhands
+// optionally narrow each side (e.g. a locked pick); they default to catalog.rubbers.
+// Deterministic: ties resolve to the first (blade, forehand, backhand) in catalog order.
 export function recommendSetup(catalog, targets) {
   const forehands = catalog.forehands ?? catalog.rubbers;
   const backhands = catalog.backhands ?? catalog.rubbers;
   const r1 = (v) => Math.round(v * 10) / 10;
   const fhDist = forehands.map((f) => sideDistance(f, targets.forehand));
   const bhDist = backhands.map((h) => sideDistance(h, targets.backhand));
-  // One scan with plain numbers (no per-combination objects), then an exact check of the
-  // near-best combinations. The scan uses unrounded stats and remembers every combination
-  // within a window of the best unrounded distance so far. Displayed stats are rounded to
-  // 0.1, which moves each of the three axis terms by at most 0.05 / range, so the exact
-  // winner is always within 2 * ROUND_SLACK of the smallest unrounded distance. Only those
-  // few candidates get the exact (rounded) distance. Ties resolve to the first (blade,
-  // forehand, backhand) in catalog order, as a plain scan would.
-  const ROUND_SLACK = 0.05 / TARGET_RANGES.speed + 0.05 / TARGET_RANGES.spin + 0.05 / TARGET_RANGES.control + 1e-9;
-  const nh = backhands.length;
-  const n = forehands.length * nh;
-  const pSpeed = new Float64Array(n);
-  const pControl = new Float64Array(n);
-  const pFloor = new Float64Array(n); // spin + per-side target terms: independent of the blade
-  for (let f = 0; f < forehands.length; f += 1) {
-    for (let h = 0; h < nh; h += 1) {
-      const p = f * nh + h;
-      pSpeed[p] = forehands[f].speed * 0.35 + backhands[h].speed * 0.25;
-      pControl[p] = forehands[f].control * 0.3 + backhands[h].control * 0.3;
-      pFloor[p] = Math.abs(forehands[f].spin * 0.6 + backhands[h].spin * 0.4 - targets.spin) / TARGET_RANGES.spin + fhDist[f] + bhDist[h];
-    }
-  }
+  const { speed: pSpeed, spin: pSpin, control: pControl, fIndex, hIndex, starts, order, range } = pairIndex(forehands, backhands);
+  const blades = catalog.blades;
+  const SR = TARGET_RANGES.speed;
+  const PR = TARGET_RANGES.spin;
+  const CR = TARGET_RANGES.control;
+  // Displayed stats are rounded to 0.1, which moves each axis term by at most 0.05 / range, so
+  // the exact winner is within 2 * ROUND_SLACK of the smallest unrounded distance. The search
+  // first finds that smallest unrounded distance, then checks the few combinations inside the
+  // window with the exact (rounded) arithmetic.
+  const ROUND_SLACK = 0.05 / SR + 0.05 / PR + 0.05 / CR + 1e-9;
   // Blades without a published gram weight are not penalized on weight.
-  const weightTerms = catalog.blades.map((blade) => (blade.weightG == null ? 0 : axisDistance(blade.weightG, targets.weight, TARGET_RANGES.weight)));
-  const candB = [];
-  const candP = [];
-  const candU = [];
-  let minUnrounded = Infinity;
-  for (let b = 0; b < catalog.blades.length; b += 1) {
-    const bs = catalog.blades[b].speed * 0.4 - targets.speed;
-    const bc = catalog.blades[b].control * 0.4 - targets.control;
+  const weightTerms = blades.map((blade) => (blade.weightG == null ? 0 : axisDistance(blade.weightG, targets.weight, TARGET_RANGES.weight)));
+  // Lower bound per blade over every possible rubber pair.
+  const spinFloor = gapToZero(range.spin[0] - targets.spin, range.spin[1] - targets.spin) / PR;
+  const lower = blades.map(
+    (blade, b) =>
+      weightTerms[b] +
+      spinFloor +
+      gapToZero(blade.speed * 0.4 + range.speed[0] - targets.speed, blade.speed * 0.4 + range.speed[1] - targets.speed) / SR +
+      gapToZero(blade.control * 0.4 + range.control[0] - targets.control, blade.control * 0.4 + range.control[1] - targets.control) / CR
+  );
+  // A blade with the same speed, control and weight term as an earlier blade can never win (equal
+  // distance, later in catalog order), so only the first of each kind is searched.
+  const seenKinds = new Set();
+  const distinct = blades.map((blade, b) => {
+    const kind = blade.speed + "|" + blade.control + "|" + weightTerms[b];
+    if (seenKinds.has(kind)) return false;
+    seenKinds.add(kind);
+    return true;
+  });
+  const byLower = blades.map((_, b) => b).filter((b) => distinct[b]).sort((x, y) => lower[x] - lower[y] || x - y);
+  const centre = clamp(Math.floor(targets.spin / SPIN_BUCKET), 0, SPIN_BUCKETS - 1);
+
+  // Calls visit(p, unroundedDistance) for every pair of blade b whose unrounded distance can still
+  // be <= limit(). Buckets are walked outward from the target spin and the walk stops once the
+  // spin gap alone exceeds the allowance.
+  const walk = (b, limit, visit) => {
+    const bs = blades[b].speed * 0.4 - targets.speed;
+    const bc = blades[b].control * 0.4 - targets.control;
     const wt = weightTerms[b];
-    for (let p = 0; p < n; p += 1) {
-      const u = Math.abs(bs + pSpeed[p]) / TARGET_RANGES.speed + pFloor[p] + Math.abs(bc + pControl[p]) / TARGET_RANGES.control + wt;
-      if (u <= minUnrounded + 2 * ROUND_SLACK) {
-        if (u < minUnrounded) minUnrounded = u;
-        candB.push(b);
-        candP.push(p);
-        candU.push(u);
+    for (let dir = 0; dir < 2; dir += 1) {
+      for (let k = dir === 0 ? centre : centre - 1; k >= 0 && k < SPIN_BUCKETS; k += dir === 0 ? 1 : -1) {
+        const gap = dir === 0 ? Math.max(0, k * SPIN_BUCKET - targets.spin) : Math.max(0, targets.spin - (k + 1) * SPIN_BUCKET);
+        if (gap / PR + wt > limit()) break;
+        const allowance = limit() - gap / PR - wt;
+        // First pair in this bucket with speed >= the lower edge of the window.
+        const speedLo = -bs - allowance * SR;
+        const speedHi = -bs + allowance * SR;
+        let lo = starts[k];
+        let hi = starts[k + 1];
+        while (lo < hi) {
+          const mid = (lo + hi) >> 1;
+          if (pSpeed[order[mid]] < speedLo) lo = mid + 1;
+          else hi = mid;
+        }
+        for (let i = lo; i < starts[k + 1] && pSpeed[order[i]] <= speedHi; i += 1) {
+          const p = order[i];
+          const u = Math.abs(bs + pSpeed[p]) / SR + Math.abs(pSpin[p] - targets.spin) / PR + Math.abs(bc + pControl[p]) / CR + wt + fhDist[fIndex[p]] + bhDist[hIndex[p]];
+          if (u <= limit()) visit(p, u);
+        }
       }
     }
+  };
+
+  let minUnrounded = Infinity;
+  for (const b of byLower) {
+    if (lower[b] > minUnrounded) break;
+    walk(b, () => minUnrounded, (p, u) => {
+      if (u < minUnrounded) minUnrounded = u;
+    });
   }
-  const limit = minUnrounded + 2 * ROUND_SLACK;
+  const windowEnd = minUnrounded + 2 * ROUND_SLACK;
   let bestDistance = Infinity;
   let bestB = -1;
   let bestF = -1;
   let bestH = -1;
   let bestOrder = -1;
-  for (let c = 0; c < candB.length; c += 1) {
-    if (candU[c] > limit) continue;
-    const b = candB[c];
-    const p = candP[c];
-    const f = Math.floor(p / nh);
-    const h = p - f * nh;
-    const blade = catalog.blades[b];
-    const fh = forehands[f];
-    const bh = backhands[h];
-    const speed = r1(blade.speed * 0.4 + fh.speed * 0.35 + bh.speed * 0.25);
-    const spin = r1(fh.spin * 0.6 + bh.spin * 0.4);
-    const control = r1(blade.control * 0.4 + fh.control * 0.3 + bh.control * 0.3);
-    const distance =
-      Math.abs(speed - targets.speed) / TARGET_RANGES.speed +
-      Math.abs(spin - targets.spin) / TARGET_RANGES.spin +
-      Math.abs(control - targets.control) / TARGET_RANGES.control +
-      weightTerms[b] +
-      fhDist[f] +
-      bhDist[h];
-    // Candidates arrive in (blade, forehand, backhand) order, so a strict < keeps the first tie.
-    if (distance < bestDistance) {
-      bestDistance = distance;
-      bestB = b;
-      bestF = f;
-      bestH = h;
-    }
+  const nh = backhands.length;
+  for (let b = 0; b < blades.length; b += 1) {
+    if (!distinct[b] || lower[b] > windowEnd) continue;
+    const blade = blades[b];
+    walk(b, () => windowEnd, (p) => {
+      const f = fIndex[p];
+      const h = hIndex[p];
+      const fh = forehands[f];
+      const bh = backhands[h];
+      const speed = r1(blade.speed * 0.4 + fh.speed * 0.35 + bh.speed * 0.25);
+      const spin = r1(fh.spin * 0.6 + bh.spin * 0.4);
+      const control = r1(blade.control * 0.4 + fh.control * 0.3 + bh.control * 0.3);
+      const distance =
+        Math.abs(speed - targets.speed) / SR +
+        Math.abs(spin - targets.spin) / PR +
+        Math.abs(control - targets.control) / CR +
+        weightTerms[b] +
+        fhDist[f] +
+        bhDist[h];
+      const pairOrder = f * nh + h;
+      // Blades are visited in catalog order, so only an earlier pair of the same blade beats an equal distance.
+      if (distance < bestDistance || (distance === bestDistance && b === bestB && pairOrder < bestOrder)) {
+        bestDistance = distance;
+        bestB = b;
+        bestF = f;
+        bestH = h;
+        bestOrder = pairOrder;
+      }
+    });
   }
   const blade = catalog.blades[bestB];
   const forehand = forehands[bestF];
