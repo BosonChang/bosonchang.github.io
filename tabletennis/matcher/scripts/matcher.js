@@ -11,6 +11,7 @@ const NOT_PUBLISHED = "Not published";
 let catalog = null;
 let brand = ""; // "" = all brands
 let handle = ""; // "" = any, else FL / ST / AN
+let hideDiscontinued = false;
 // Per-piece brand filters. A set value overrides the overall brand for that piece only.
 const gearBrand = { blade: "", forehand: "", backhand: "" };
 // Current setup is the single source of truth; the sliders, dropdowns and cards
@@ -31,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
       wireSelectionInputs();
       wireSliderInputs();
       wireHandleFilter();
+      wireHideDiscontinued();
       wireAdvanced();
     })
     .catch((error) => {
@@ -54,6 +56,10 @@ function clearChildren(node) {
 // Value with an optional unit, or "Not published" when the catalog has none.
 function fmt(value, unit = "") {
   return value == null ? NOT_PUBLISHED : `${value}${unit}`;
+}
+
+function isDiscontinued(item) {
+  return item.status === "discontinued";
 }
 
 function isLocked(piece) {
@@ -89,6 +95,13 @@ function buildBrandChips() {
       render();
     });
     container.appendChild(chip);
+  });
+}
+
+function wireHideDiscontinued() {
+  document.getElementById("hide-discontinued").addEventListener("change", (event) => {
+    hideDiscontinued = event.target.checked;
+    recommendFromTargets();
   });
 }
 
@@ -135,7 +148,8 @@ function buildGearBrandSelects() {
 // unfiltered list, with a note.
 function pool() {
   const notes = new Set();
-  const forPiece = (items, kind, piece) => {
+  const forPiece = (all, kind, piece) => {
+    const items = hideDiscontinued && all.some((item) => !isDiscontinued(item)) ? all.filter((item) => !isDiscontinued(item)) : all;
     const wanted = gearBrand[piece] || brand;
     const matches = wanted ? items.filter((item) => item.brand === wanted) : items;
     if (matches.length) return matches;
@@ -162,9 +176,13 @@ function updateNote() {
 
 function populateSelect(selectId, items) {
   const select = document.getElementById(selectId);
+  // Rebuilding hundreds of options on every slider move is slow; skip when the list is unchanged.
+  const key = items.map((item) => item.id).join("|");
+  if (select.dataset.key === key) return;
+  select.dataset.key = key;
   clearChildren(select);
   sortedByBrand(items).forEach((item) => {
-    const option = el("option", "", `${item.brand} ${item.name}`);
+    const option = el("option", "", `${item.brand} ${item.name}${item.zhName ? ` ${item.zhName}` : ""}${isDiscontinued(item) ? " (discontinued)" : ""}`);
     option.value = item.id;
     select.appendChild(option);
   });
@@ -265,7 +283,7 @@ function wireAdvanced() {
       const slider = document.getElementById(`adv-${side}-${axis}`);
       slider.addEventListener("input", () => {
         document.getElementById(`adv-${side}-${axis}-value`).textContent = slider.value;
-        recommendFromTargets();
+        queueRecommendation();
       });
     });
   });
@@ -295,6 +313,18 @@ function recommendationPool() {
     forehands: isLocked("forehand") ? [findRubber(current.forehandId)] : forehands,
     backhands: isLocked("backhand") ? [findRubber(current.backhandId)] : backhands
   };
+}
+
+// Slider events can arrive faster than the search runs; coalesce them into at most one
+// recommendation per 30 ms (a timer, not requestAnimationFrame, which stalls in background tabs).
+let recommendQueued = false;
+function queueRecommendation() {
+  if (recommendQueued) return;
+  recommendQueued = true;
+  setTimeout(() => {
+    recommendQueued = false;
+    recommendFromTargets();
+  }, 30);
 }
 
 function recommendFromTargets() {
@@ -346,7 +376,7 @@ function wireSliderInputs() {
     const slider = document.getElementById(`target-${key}`);
     slider.addEventListener("input", () => {
       document.getElementById(`${key}-value`).textContent = key === "weight" ? `${slider.value} g` : slider.value;
-      recommendFromTargets();
+      queueRecommendation();
     });
   });
 }
@@ -389,6 +419,12 @@ function meterRow(label, value, valueText, target, scale = { min: 1, max: 10 }) 
   return row;
 }
 
+// "Status" row for items with a known status.
+function addStatusSpec(list, item) {
+  if (item.status === "discontinued") addSpec(list, "Status", `Discontinued. ${item.statusNote ?? ""}`.trim());
+  else if (item.status === "current") addSpec(list, "Status", "Current (in the maker's current blade table)");
+}
+
 function addSpec(list, label, value) {
   list.appendChild(el("dt", "", label));
   list.appendChild(el("dd", "", value));
@@ -397,7 +433,10 @@ function addSpec(list, label, value) {
 // Shared card frame: role band, product photo (hotlinked from the shop, no local copy), body.
 function buildCard(card, item, roleText) {
   clearChildren(card);
-  card.appendChild(el("div", "gear-role", roleText));
+  const role = el("div", "gear-role");
+  role.appendChild(el("span", "", roleText));
+  if (isDiscontinued(item)) role.appendChild(el("span", "badge", "Discontinued"));
+  card.appendChild(role);
 
   const media = el("div", "gear-media");
   const link = el("a");
@@ -425,7 +464,7 @@ function buildCard(card, item, roleText) {
 
   const body = el("div", "gear-body");
   body.appendChild(el("div", "gear-brand", item.brand));
-  body.appendChild(el("h3", "", item.name));
+  body.appendChild(el("h3", "", item.zhName ? `${item.name} ${item.zhName}` : item.name));
   card.appendChild(body);
   return body;
 }
@@ -463,6 +502,7 @@ function renderBladeCard(blade) {
     addSpec(specs, "Speed (published)", `${blade.speedRating} / 100`);
     addSpec(specs, "Control (published)", `${blade.controlRating} / 100`);
   }
+  addStatusSpec(specs, blade);
   finishCard(body, blade, specs);
 }
 

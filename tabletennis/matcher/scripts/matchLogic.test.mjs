@@ -89,3 +89,40 @@ test("every catalog item has a brand, a product link and an image URL (empty = n
     assert.ok(item.brand && (item.imageUrl === "" || item.imageUrl.startsWith("https://")) && item.productUrl.startsWith("https://"), item.id);
   }
 });
+
+test("every item with a status uses a known value, and discontinued items explain why", () => {
+  for (const item of [...catalog.blades, ...catalog.rubbers]) {
+    if (item.status === undefined) continue;
+    assert.ok(["current", "discontinued"].includes(item.status), item.id);
+    if (item.status === "discontinued") assert.ok(item.statusNote && item.statusNote.length > 10, item.id);
+  }
+  assert.ok(catalog.blades.filter((b) => b.brand === "Butterfly" && b.status === "current").length >= 52);
+});
+
+test("pruned search returns exactly what a plain scan of every combination returns", () => {
+  const plain = (targets) => {
+    let best = null;
+    for (const blade of catalog.blades) {
+      for (const fh of catalog.rubbers) {
+        for (const bh of catalog.rubbers) {
+          const s = computeSetupStats(blade, fh, bh);
+          const w = blade.weightG == null ? 0 : Math.abs(blade.weightG - targets.weight) / 25;
+          const d = Math.abs(s.speed - targets.speed) / 9 + Math.abs(s.spin - targets.spin) / 9 + Math.abs(s.control - targets.control) / 9 + w;
+          if (!best || d < best.d) best = { d, blade, fh, bh };
+        }
+      }
+    }
+    return best;
+  };
+  for (const targets of [
+    { speed: 8, spin: 8, control: 8, weight: 85 },
+    { speed: 9.5, spin: 9.5, control: 5, weight: 75 },
+    { speed: 3, spin: 4, control: 9, weight: 90 }
+  ]) {
+    const expected = plain(targets);
+    const got = recommendSetup(catalog, targets);
+    assert.equal(got.blade.id, expected.blade.id);
+    assert.equal(got.forehand.id, expected.fh.id);
+    assert.equal(got.backhand.id, expected.bh.id);
+  }
+});

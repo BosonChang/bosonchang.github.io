@@ -577,3 +577,22 @@ summary:focus-visible {
     font-size: 0.85rem;
     padding: 0.3rem 0.5rem;
 }
+
+/* ---------- discontinued marker ---------- */
+
+.gear-role {
+    justify-content: space-between;
+}
+
+.badge {
+    background: var(--paper);
+    color: var(--ink);
+    padding: 0.05rem 0.45rem;
+    border-radius: 2px;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+}
+
+.hide-switch {
+    margin-top: 0.7rem;
+}

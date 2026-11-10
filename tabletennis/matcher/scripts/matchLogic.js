@@ -82,24 +82,85 @@ function sideDistance(rubber, target) {
 export function recommendSetup(catalog, targets) {
   const forehands = catalog.forehands ?? catalog.rubbers;
   const backhands = catalog.backhands ?? catalog.rubbers;
-  let best = null;
-  for (const blade of catalog.blades) {
-    for (const forehand of forehands) {
-      for (const backhand of backhands) {
-        const stats = computeSetupStats(blade, forehand, backhand);
-        const distance =
-          axisDistance(stats.speed, targets.speed, TARGET_RANGES.speed) +
-          axisDistance(stats.spin, targets.spin, TARGET_RANGES.spin) +
-          axisDistance(stats.control, targets.control, TARGET_RANGES.control) +
-          // Blades without a published gram weight are not penalized on weight.
-          (stats.weight == null ? 0 : axisDistance(stats.weight, targets.weight, TARGET_RANGES.weight)) +
-          sideDistance(forehand, targets.forehand) +
-          sideDistance(backhand, targets.backhand);
-        if (!best || distance < best.distance) {
-          best = { blade, forehand, backhand, stats, distance };
-        }
+  const r1 = (v) => Math.round(v * 10) / 10;
+  const fhDist = forehands.map((f) => sideDistance(f, targets.forehand));
+  const bhDist = backhands.map((h) => sideDistance(h, targets.backhand));
+  // One scan with plain numbers (no per-combination objects), then an exact check of the
+  // near-best combinations. The scan uses unrounded stats and remembers every combination
+  // within a window of the best unrounded distance so far. Displayed stats are rounded to
+  // 0.1, which moves each of the three axis terms by at most 0.05 / range, so the exact
+  // winner is always within 2 * ROUND_SLACK of the smallest unrounded distance. Only those
+  // few candidates get the exact (rounded) distance. Ties resolve to the first (blade,
+  // forehand, backhand) in catalog order, as a plain scan would.
+  const ROUND_SLACK = 0.05 / TARGET_RANGES.speed + 0.05 / TARGET_RANGES.spin + 0.05 / TARGET_RANGES.control + 1e-9;
+  const nh = backhands.length;
+  const n = forehands.length * nh;
+  const pSpeed = new Float64Array(n);
+  const pControl = new Float64Array(n);
+  const pFloor = new Float64Array(n); // spin + per-side target terms: independent of the blade
+  for (let f = 0; f < forehands.length; f += 1) {
+    for (let h = 0; h < nh; h += 1) {
+      const p = f * nh + h;
+      pSpeed[p] = forehands[f].speed * 0.35 + backhands[h].speed * 0.25;
+      pControl[p] = forehands[f].control * 0.3 + backhands[h].control * 0.3;
+      pFloor[p] = Math.abs(forehands[f].spin * 0.6 + backhands[h].spin * 0.4 - targets.spin) / TARGET_RANGES.spin + fhDist[f] + bhDist[h];
+    }
+  }
+  // Blades without a published gram weight are not penalized on weight.
+  const weightTerms = catalog.blades.map((blade) => (blade.weightG == null ? 0 : axisDistance(blade.weightG, targets.weight, TARGET_RANGES.weight)));
+  const candB = [];
+  const candP = [];
+  const candU = [];
+  let minUnrounded = Infinity;
+  for (let b = 0; b < catalog.blades.length; b += 1) {
+    const bs = catalog.blades[b].speed * 0.4 - targets.speed;
+    const bc = catalog.blades[b].control * 0.4 - targets.control;
+    const wt = weightTerms[b];
+    for (let p = 0; p < n; p += 1) {
+      const u = Math.abs(bs + pSpeed[p]) / TARGET_RANGES.speed + pFloor[p] + Math.abs(bc + pControl[p]) / TARGET_RANGES.control + wt;
+      if (u <= minUnrounded + 2 * ROUND_SLACK) {
+        if (u < minUnrounded) minUnrounded = u;
+        candB.push(b);
+        candP.push(p);
+        candU.push(u);
       }
     }
   }
-  return best;
+  const limit = minUnrounded + 2 * ROUND_SLACK;
+  let bestDistance = Infinity;
+  let bestB = -1;
+  let bestF = -1;
+  let bestH = -1;
+  let bestOrder = -1;
+  for (let c = 0; c < candB.length; c += 1) {
+    if (candU[c] > limit) continue;
+    const b = candB[c];
+    const p = candP[c];
+    const f = Math.floor(p / nh);
+    const h = p - f * nh;
+    const blade = catalog.blades[b];
+    const fh = forehands[f];
+    const bh = backhands[h];
+    const speed = r1(blade.speed * 0.4 + fh.speed * 0.35 + bh.speed * 0.25);
+    const spin = r1(fh.spin * 0.6 + bh.spin * 0.4);
+    const control = r1(blade.control * 0.4 + fh.control * 0.3 + bh.control * 0.3);
+    const distance =
+      Math.abs(speed - targets.speed) / TARGET_RANGES.speed +
+      Math.abs(spin - targets.spin) / TARGET_RANGES.spin +
+      Math.abs(control - targets.control) / TARGET_RANGES.control +
+      weightTerms[b] +
+      fhDist[f] +
+      bhDist[h];
+    // Candidates arrive in (blade, forehand, backhand) order, so a strict < keeps the first tie.
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      bestB = b;
+      bestF = f;
+      bestH = h;
+    }
+  }
+  const blade = catalog.blades[bestB];
+  const forehand = forehands[bestF];
+  const backhand = backhands[bestH];
+  return { blade, forehand, backhand, stats: computeSetupStats(blade, forehand, backhand), distance: bestDistance };
 }
