@@ -4,12 +4,15 @@ const HANDLE_NAMES = { FL: "Flared", ST: "Straight", AN: "Anatomic" };
 const SLIDER_IDS = ["speed", "spin", "control", "weight"];
 const RUBBER_AXES = ["speed", "spin", "control"];
 const SIDES = ["forehand", "backhand"];
+const PIECES = ["blade", "forehand", "backhand"];
 const WEIGHT_RANGE = { min: 70, max: 95 }; // must match the weight slider in index.html
 const NOT_PUBLISHED = "Not published";
 
 let catalog = null;
 let brand = ""; // "" = all brands
 let handle = ""; // "" = any, else FL / ST / AN
+// Per-piece brand filters. A set value overrides the overall brand for that piece only.
+const gearBrand = { blade: "", forehand: "", backhand: "" };
 // Current setup is the single source of truth; the sliders, dropdowns and cards
 // are all rendered from it, never from each other.
 let current = { bladeId: null, forehandId: null, backhandId: null };
@@ -20,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .then((data) => {
       catalog = withRatings(data);
       buildBrandChips();
+      buildGearBrandSelects();
       buildAdvanced();
       resetPool();
       applySelectionToSliders();
@@ -70,6 +74,10 @@ function buildBrandChips() {
     chip.setAttribute("aria-pressed", String(name === brand));
     chip.addEventListener("click", () => {
       brand = name;
+      PIECES.forEach((piece) => {
+        gearBrand[piece] = "";
+        document.getElementById(`brand-${piece}`).value = "";
+      });
       container.querySelectorAll(".chip").forEach((other) => {
         other.setAttribute("aria-pressed", String(other.dataset.brand === brand));
       });
@@ -96,27 +104,56 @@ function wireHandleFilter() {
   });
 }
 
-// The brand and handle filters limit the dropdown choices and the recommendation.
-// A filter that would leave nothing falls back to the unfiltered list, with a note.
+// Gear lists are shown sorted by brand, then name.
+function sortedByBrand(items) {
+  return [...items].sort(
+    (x, y) => x.brand.localeCompare(y.brand) || x.name.localeCompare(y.name, undefined, { numeric: true })
+  );
+}
+
+// One brand dropdown per piece of gear. "Any" follows the overall brand chips.
+function buildGearBrandSelects() {
+  PIECES.forEach((piece) => {
+    const items = piece === "blade" ? catalog.blades : catalog.rubbers;
+    const select = document.getElementById(`brand-${piece}`);
+    const brands = [...new Set(items.map((item) => item.brand))].sort((x, y) => x.localeCompare(y));
+    ["", ...brands].forEach((name) => {
+      const option = el("option", "", name || "Any brand");
+      option.value = name;
+      select.appendChild(option);
+    });
+    select.addEventListener("change", () => {
+      gearBrand[piece] = select.value;
+      // Re-run the recommendation with the new filter; locked pieces stay as they are.
+      recommendFromTargets();
+    });
+  });
+}
+
+// The overall brand, each piece's own brand and the handle filter limit the dropdown
+// choices and the recommendation. A filter that would leave nothing falls back to the
+// unfiltered list, with a note.
 function pool() {
-  const notes = [];
-  const byBrand = (items, kind) => {
-    const matches = brand ? items.filter((item) => item.brand === brand) : items;
+  const notes = new Set();
+  const forPiece = (items, kind, piece) => {
+    const wanted = gearBrand[piece] || brand;
+    const matches = wanted ? items.filter((item) => item.brand === wanted) : items;
     if (matches.length) return matches;
-    notes.push(`No ${brand} ${kind} with published ratings yet, so all brands' ${kind} are shown.`);
+    notes.add(`No ${wanted} ${kind} with published ratings yet, so all brands' ${kind} are shown.`);
     return items;
   };
-  let blades = byBrand(catalog.blades, "blades");
-  const rubbers = byBrand(catalog.rubbers, "rubbers");
+  let blades = forPiece(catalog.blades, "blades", "blade");
+  const forehands = forPiece(catalog.rubbers, "rubbers", "forehand");
+  const backhands = forPiece(catalog.rubbers, "rubbers", "backhand");
   if (handle) {
     const withHandle = blades.filter((blade) => bladeHasHandle(blade, handle));
     if (withHandle.length) {
       blades = withHandle;
     } else {
-      notes.push(`No blades with a ${HANDLE_NAMES[handle].toLowerCase()} handle in this selection, so all handles are shown.`);
+      notes.add(`No blades with a ${HANDLE_NAMES[handle].toLowerCase()} handle in this selection, so all handles are shown.`);
     }
   }
-  return { blades, rubbers, notes };
+  return { blades, forehands, backhands, notes: [...notes] };
 }
 
 function updateNote() {
@@ -126,25 +163,35 @@ function updateNote() {
 function populateSelect(selectId, items) {
   const select = document.getElementById(selectId);
   clearChildren(select);
-  items.forEach((item) => {
+  sortedByBrand(items).forEach((item) => {
     const option = el("option", "", `${item.brand} ${item.name}`);
     option.value = item.id;
     select.appendChild(option);
   });
 }
 
-function resetPool() {
-  const { blades, rubbers } = pool();
-  populateSelect("select-blade", blades);
-  populateSelect("select-forehand", rubbers);
-  populateSelect("select-backhand", rubbers);
-  current = {
-    bladeId: blades[0].id,
-    forehandId: rubbers[0].id,
-    backhandId: rubbers[1] ? rubbers[1].id : rubbers[0].id
-  };
+// Fills the three gear dropdowns from the current pools, keeping a locked or already-chosen
+// piece that a filter would otherwise hide.
+function refreshSelects() {
+  const lists = pool();
+  const keep = (list, item) => (list.some((x) => x.id === item.id) ? list : [item, ...list]);
+  populateSelect("select-blade", keep(lists.blades, findBlade(current.bladeId)));
+  populateSelect("select-forehand", keep(lists.forehands, findRubber(current.forehandId)));
+  populateSelect("select-backhand", keep(lists.backhands, findRubber(current.backhandId)));
   syncSelects();
   updateNote();
+}
+
+function resetPool() {
+  const { blades, forehands, backhands } = pool();
+  const firstBlade = sortedByBrand(blades)[0];
+  const fhList = sortedByBrand(forehands);
+  const bhList = sortedByBrand(backhands);
+  // Start with two different rubbers when the lists allow it.
+  const forehand = fhList[0];
+  const backhand = bhList.find((r) => r.id !== forehand.id) ?? bhList[0];
+  current = { bladeId: firstBlade.id, forehandId: forehand.id, backhandId: backhand.id };
+  refreshSelects();
 }
 
 function syncSelects() {
@@ -242,22 +289,18 @@ function readTargets() {
 
 // Locked pieces stay fixed; the recommendation only searches the unlocked ones.
 function recommendationPool() {
-  const { blades, rubbers } = pool();
+  const { blades, forehands, backhands } = pool();
   return {
     blades: isLocked("blade") ? [findBlade(current.bladeId)] : blades,
-    forehands: isLocked("forehand") ? [findRubber(current.forehandId)] : rubbers,
-    backhands: isLocked("backhand") ? [findRubber(current.backhandId)] : rubbers
+    forehands: isLocked("forehand") ? [findRubber(current.forehandId)] : forehands,
+    backhands: isLocked("backhand") ? [findRubber(current.backhandId)] : backhands
   };
 }
 
 function recommendFromTargets() {
   const best = recommendSetup(recommendationPool(), readTargets());
   current = { bladeId: best.blade.id, forehandId: best.forehand.id, backhandId: best.backhand.id };
-  // Show only the filtered blades, keeping a locked blade that the filter excludes.
-  const { blades } = pool();
-  populateSelect("select-blade", blades.some((b) => b.id === current.bladeId) ? blades : [best.blade, ...blades]);
-  syncSelects();
-  updateNote();
+  refreshSelects();
   render();
 }
 

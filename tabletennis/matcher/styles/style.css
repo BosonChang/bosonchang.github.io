@@ -570,3 +570,10 @@ summary:focus-visible {
         overflow: visible;
     }
 }
+
+/* ---------- per-gear brand select above each gear dropdown ---------- */
+
+.pick-row .brand-select {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.5rem;
+}
