@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Table Tennis Equipment Matcher</title>
+    <script type="module" src="/global/scripts/navbar.js"></script>
+    <script type="module" src="scripts/matcher.js"></script>
+    <link rel="stylesheet" href="/global/styles/style.css">
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+
+<body>
+    <div id="navbar"></div>
+    <div id="content-area">
+        <h1 class="page-header">Equipment Matcher</h1>
+        <p class="section-sub">
+            Set the feel you want and we pick a blade and two rubbers, or choose gear yourself and read off
+            the stats. Both stay in sync. Open Advanced to tune the forehand and backhand rubbers separately.
+        </p>
+
+        <div class="matcher-layout">
+            <div class="matcher-controls">
+                <section class="panel" aria-labelledby="brand-heading">
+                    <h2 id="brand-heading">Brand</h2>
+                    <div id="brand-chips" class="chips" role="group" aria-label="Filter gear by brand"></div>
+                    <p id="brand-note" class="fine-print" role="status" aria-live="polite"></p>
+                </section>
+
+                <section class="panel" aria-labelledby="targets-heading">
+                    <h2 id="targets-heading">Setup Targets</h2>
+                    <form id="target-form">
+                        <div class="target-row">
+                            <label for="target-speed">Speed</label>
+                            <output id="speed-value" for="target-speed">6</output>
+                            <input type="range" id="target-speed" min="1" max="10" step="1" value="6">
+                        </div>
+                        <div class="target-row">
+                            <label for="target-spin">Spin</label>
+                            <output id="spin-value" for="target-spin">6</output>
+                            <input type="range" id="target-spin" min="1" max="10" step="1" value="6">
+                        </div>
+                        <div class="target-row">
+                            <label for="target-control">Control</label>
+                            <output id="control-value" for="target-control">6</output>
+                            <input type="range" id="target-control" min="1" max="10" step="1" value="6">
+                        </div>
+                        <div class="target-row">
+                            <label for="target-weight">Blade weight</label>
+                            <output id="weight-value" for="target-weight">85 g</output>
+                            <input type="range" id="target-weight" min="70" max="95" step="1" value="85">
+                        </div>
+                    </form>
+                    <div class="pick-row">
+                        <span class="field-label" id="handle-label">Handle type</span>
+                        <div class="segmented" id="handle-filter" role="group" aria-labelledby="handle-label">
+                            <button type="button" class="seg" data-handle="" aria-pressed="true">Any</button>
+                            <button type="button" class="seg" data-handle="FL" aria-pressed="false">Flared</button>
+                            <button type="button" class="seg" data-handle="ST" aria-pressed="false">Straight</button>
+                            <button type="button" class="seg" data-handle="AN" aria-pressed="false">Anatomic</button>
+                        </div>
+                    </div>
+                </section>
+
+                <details class="panel advanced" id="advanced">
+                    <summary>Advanced: tune each rubber</summary>
+                    <label class="switch advanced-switch">
+                        <input type="checkbox" id="adv-enable" role="switch">
+                        <span class="switch-track"></span>
+                        <span class="switch-text">Use separate targets</span>
+                    </label>
+                    <p class="fine-print">When on, the recommendation also matches each rubber to its own targets.</p>
+                    <fieldset class="adv-side" id="adv-forehand" disabled>
+                        <legend>Forehand rubber</legend>
+                    </fieldset>
+                    <fieldset class="adv-side" id="adv-backhand" disabled>
+                        <legend>Backhand rubber</legend>
+                    </fieldset>
+                </details>
+            </div>
+
+            <div class="matcher-result">
+                <p id="result-status" role="status" aria-live="polite"></p>
+
+                <section class="panel" aria-labelledby="picks-heading">
+                    <h2 id="picks-heading">Pick Gear Directly</h2>
+                    <div class="picks-grid">
+                    <div class="pick-row">
+                        <div class="pick-head">
+                            <label for="select-blade">Blade</label>
+                            <label class="switch"><input type="checkbox" id="lock-blade" role="switch"><span class="switch-track"></span><span class="switch-text">Lock</span></label>
+                        </div>
+                        <select id="select-blade"></select>
+                    </div>
+                    <div class="pick-row">
+                        <div class="pick-head">
+                            <label for="select-forehand">Forehand rubber</label>
+                            <label class="switch"><input type="checkbox" id="lock-forehand" role="switch"><span class="switch-track"></span><span class="switch-text">Lock</span></label>
+                        </div>
+                        <select id="select-forehand"></select>
+                    </div>
+                    <div class="pick-row">
+                        <div class="pick-head">
+                            <label for="select-backhand">Backhand rubber</label>
+                            <label class="switch"><input type="checkbox" id="lock-backhand" role="switch"><span class="switch-track"></span><span class="switch-text">Lock</span></label>
+                        </div>
+                        <select id="select-backhand"></select>
+                    </div>
+                    </div>
+                    <p class="fine-print">Lock a piece and the sliders only change the rest.</p>
+                </section>
+
+                <div class="setup-cards">
+                    <article class="gear-card" id="blade-card"></article>
+                    <article class="gear-card" id="forehand-card"></article>
+                    <article class="gear-card" id="backhand-card"></article>
+                </div>
+
+                <section class="panel" aria-labelledby="stats-heading">
+                    <h2 id="stats-heading">Setup Stats</h2>
+                    <div id="stats-readout" class="stat-bars"></div>
+                    <p class="stat-legend"><span class="legend-fill"></span> Result of this gear
+                        <span class="legend-target"></span> Your target</p>
+                    <p class="fine-print">
+                        Ratings come from shop, maker and community listings (0&ndash;100, shown here as 1&ndash;10)
+                        and are approximate.
+                    </p>
+                </section>
+            </div>
+        </div>
+
+        <a class="back" href="/tabletennis">&larr; Back to Table Tennis</a>
+    </div>
+    <div id="footer"></div>
+</body>
+
+</html>
